@@ -1,3 +1,12 @@
+/*
+- **Purpose:** This procedure deletes existing tables in the `Silver` layer,
+	then recreates them by copying **all data** from corresponding tables in the `Bronze` (raw) layer.
+- **Data Movement:** It completely refreshes six tables (e.g., `crm_cust_info`, `erp_loc_a101`) 
+	by moving data from the `Bronze` schema to the `Silver` schema.
+- **Audit Trail:** After copying, it adds a column named **`dwh_create_date`** to each new Silver table,
+	automatically timestamping the exact moment the data was loaded.
+*/
+
 Create or alter Procedure Data_loading_from_Bronze_Silver AS
 Begin
 
