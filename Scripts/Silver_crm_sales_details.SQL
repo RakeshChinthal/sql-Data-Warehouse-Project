@@ -1,41 +1,35 @@
 INSERT INTO Silver.crm_sales_details (
-sls_ord_num,
-sls_prd_key,
-sls_cust_id,
-sls_order_dt,
-sls_ship_dt,
-sls_due_dt,
-sls_sales,
-sls_quantity,
-sls_price)
+    sls_ord_num,
+    sls_prd_key,
+    sls_cust_id,
+    sls_order_dt,
+    sls_ship_dt,
+    sls_due_dt,
+    sls_sales,
+    sls_quantity,
+    sls_price
+)
 
 SELECT
-sls_ord_num,
-sls_prd_key,
-sls_cust_id,
+    sls_ord_num, -- Order Number (copied as is)
+    sls_prd_key, -- Product Key (copied as is)
+    sls_cust_id, -- Customer ID (copied as is)
 
-CASE WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
-        ELSE CAST(CAST(sls_order_dt AS VARCHAR) AS DATE)
-END AS sls_order_dt,
+    -- Data transformation logic for sls_order_dt: Converts source data (INT/VARCHAR) to DATE type.
+    CASE WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
+         -- Set to NULL if date is 0 or not exactly 8 characters (assuming YYYYMMDD format)
+         ELSE CAST(CAST(sls_order_dt AS VARCHAR) AS DATE)
+         -- Otherwise, cast to VARCHAR and then to DATE
+    END AS sls_order_dt,
 
-CASE WHEN sls_ship_dt = 0 OR LEN(sls_ship_dt) != 8 THEN NULL
-        ELSE CAST(CAST(sls_ship_dt AS VARCHAR) AS DATE)
-END AS sls_ship_dt,
+    -- Data transformation logic for sls_ship_dt: Converts source data (INT/VARCHAR) to DATE type.
+    CASE WHEN sls_ship_dt = 0 OR LEN(sls_ship_dt) != 8 THEN NULL
+         -- Set to NULL if date is 0 or not exactly 8 characters
+         ELSE CAST(CAST(sls_ship_dt AS VARCHAR) AS DATE)
+    END AS sls_ship_dt,
 
-CASE WHEN sls_due_dt = 0 OR LEN(sls_due_dt) != 8 THEN NULL
-        ELSE CAST(CAST(sls_due_dt AS VARCHAR) AS DATE)
-END AS sls_due_dt,
-
-CASE WHEN sls_sales IS NULL OR sls_sales <=0 or ABS(sls_sales) != sls_sales * sls_quantity
-		THEN sls_quantity * ABS(sls_price)
-		else sls_sales
-END AS sls_sales,
-
-sls_quantity,
-
-CASE WHEN sls_price IS NULL OR sls_price <=0 
-	THEN sls_sales / NULLIF(sls_quantity,0)
-	ELSE sls_price
-END AS sls_price
-
-FROM bronze.crm_sales_details
+    -- Data transformation logic for sls_due_dt: Converts source data (INT/VARCHAR) to DATE type.
+    CASE WHEN sls_due_dt = 0 OR LEN(sls_due_dt) != 8 THEN NULL
+         -- Set to NULL if date is 0 or not exactly 8 characters
+         ELSE CAST(CAST(sls_due_dt AS VARCHAR) AS DATE)
+    END AS sls_due_
